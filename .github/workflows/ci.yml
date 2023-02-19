@@ -1,0 +1,21 @@
+on: push
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: ghcup
+        run: |
+          ghcup --version
+          ghcup config set cache true
+          ghcup config add-release-channel https://raw.githubusercontent.com/haskell/ghcup-metadata/master/ghcup-prereleases-0.0.7.yaml
+          ghcup install ghc --set 9.6.0.20230210
+          ghcup install cabal --set latest
+          ghc --version
+          cabal --version
+          cabal update
+
+      - name: Build Network
+        run: |
+          cabal get network-3.1.2.7
+          cd network-3.1.2.7
+          cabal build all
